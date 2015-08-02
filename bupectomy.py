@@ -19,10 +19,8 @@ class Bupectomy(object):
         else:
             sys.exit("\n[-] File not found\n")
 
-        if olecheck:
-            return True
-        else:
-            return False
+        if olecheck == False:
+            sys.exit("[-] Not a valid .bup file")
 
     def extractfiles(self, bup):
         ole = olefile.OleFileIO(bup)
@@ -30,7 +28,6 @@ class Bupectomy(object):
         try:
             self.details = ole.openstream('Details').read()
             self.file_0 = ole.openstream('File_0').read()
-
         except Exception, e:
             print "[-] Unable to extract files from the bup"
             print e
@@ -59,24 +56,26 @@ if __name__ == "__main__":
     
     p = ArgumentParser()
     p.add_argument("bup", help="McAfee .bup file")
+    p.add_argument("-d", "--details", help="Print detection details", action="store_true")
     args = p.parse_args()
 
     if args.bup:
         b = Bupectomy()
-        filecheck = b.filecheck(sys.argv[1])
+        filecheck = b.filecheck(args.bup)
+    else:
+        print "[-] .bup file not provided"
 
-        if filecheck:
-            b.extractfiles(sys.argv[1])
-        else:
-            sys.exit("[-] Not a valid OLE file")
-
+    if args.details:
+        b.extractfiles(args.bup)
         details = b.single_byte_xor(b.details)
-        file_0 = b.single_byte_xor(b.file_0)
-
         print details
+
+    else:
+        pass
+        #will write both files to the file system
+
 else:
     pass
-
 
 
 
