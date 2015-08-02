@@ -21,6 +21,12 @@ optional arguments:
   -d, --details  Print detection details
 ```
 
+###Python Requirements
+
+* argparse
+* os
+* sys
+
 ###To-Do
 
 - [ ] Add functionality to specify an alternate output directory for the decoded files
