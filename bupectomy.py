@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import olefile
 import os
 import sys
@@ -61,18 +59,21 @@ if __name__ == "__main__":
 
     if args.bup:
         b = Bupectomy()
-        filecheck = b.filecheck(args.bup)
+        b.filecheck(args.bup)
+        b.extractfiles(args.bup)
+        b.details = b.single_byte_xor(b.details)
+        b.file_0 = b.single_byte_xor(b.file_0)
     else:
-        print "[-] .bup file not provided"
+        sys.exit("[-] .bup file not specified")
 
     if args.details:
-        b.extractfiles(args.bup)
-        details = b.single_byte_xor(b.details)
-        print details
+        print b.details
 
     else:
-        pass
-        #will write both files to the file system
+        with open("details.txt", "w") as f:
+            f.write(b.details)
+        with open("file_0.bin", "w") as f:
+            f.write(b.file_0)
 
 else:
     pass
