@@ -1,61 +1,88 @@
 #!/usr/bin/python
 
 import olefile
-import subprocess
+import os
 import sys
-import re
 
-bupFile = sys.argv[1]
 
-def fileCheck(bup):
-    # Checks for the file in the current directory
-    fileExists = subprocess.Popen('find ./{}'.format(bupFile), 
-                                                     shell=True,
-                                                     stdout=subprocess.PIPE,
-                                                     stderr=subprocess.PIPE
-                                                     )
-    fileExists.communicate()
-    exitCode = fileExists.wait()
-    if exitCode:
-        print "[+] {} not found".format(bupFile)
-        exit()
-    # Ensures the submitted file is OLE
-    # Creates output directory for xor'd files
-    isOle = olefile.isOleFile(bup)
-    if isOle:
-        parseBupName = re.search(r'.+\.', bupFile)
-        outputDirectory = "{}d".format(parseBupName.group(0))
-        subprocess.call(['mkdir', outputDirectory])
-        return outputDirectory
-    else:
-        exit()
+class Bupectomy(object):
 
-def extractFiles(bup):
-    # Extracts Details and File_0 from the bup
-    # Iterates the extracted file streams, performing binary bitwise XOR and produces the decoded output files
-    ole = olefile.OleFileIO(bup)
-    xord_details = ole.openstream('Details').read()
-    xord_file0 = ole.openstream('File_0').read()
-    return xord_details, xord_file0
+    def __init__(self):
+        self.details = None
+        self.file_0 = None
 
-def single_byte_xor(buf):
-    # Borrowed from Darren's explodebup.py, which borrowed from xortools.py
-    # Elegant, efficient XOR function
-    key = ord('\x6a')
-    out = ''
-    for i in buf:
-        out += chr(ord(i) ^ key)
-    return out
+    def filecheck(self, bup):
+        file_exists = os.path.exists(bup)
 
-def writeNewFiles(details, file0):
-    with open('{}/Details.txt'.format(newDir), 'w') as deets:
-        deets.write(details)
+        if file_exists:
+            olecheck = olefile.isOleFile(bup)
+        else:
+            sys.exit("\n[-] File not found\n")
 
-    with open('{}/File_0.bin'.format(newDir), 'wb') as file_0:
-        file_0.write(file0)
+        if olecheck:
+            return True
+        else:
+            return False
 
-newDir = fileCheck(bupFile)
-xordFiles = extractFiles(bupFile)
-detailsFinal = single_byte_xor(xordFiles[0])
-file0Final = single_byte_xor(xordFiles[1])
-writeNewFiles(detailsFinal, file0Final)
+    def extractfiles(self, bup):
+        ole = olefile.OleFileIO(bup)
+        
+        try:
+            self.details = ole.openstream('Details').read()
+            self.file_0 = ole.openstream('File_0').read()
+
+        except Exception, e:
+            print "[-] Unable to extract files from the bup"
+            print e
+
+    def single_byte_xor(self, buf):
+        # taken from xortools.py
+
+        key = ord('\x6a')
+        out = ''
+        for i in buf:
+            out += chr(ord(i) ^ key)
+        return out
+
+    def writefiles(self, buf, filename):
+
+        try:
+            with open(filename, "w") as f:
+                f.write(buf)
+        except Exception, e:
+            print e
+
+
+if __name__ == "__main__":
+    
+    from argparse import ArgumentParser
+    
+    p = ArgumentParser()
+    p.add_argument("bup", help="McAfee .bup file")
+    args = p.parse_args()
+
+    if args.bup:
+        b = Bupectomy()
+        filecheck = b.filecheck(sys.argv[1])
+
+        if filecheck:
+            b.extractfiles(sys.argv[1])
+        else:
+            sys.exit("[-] Not a valid OLE file")
+
+        details = b.single_byte_xor(b.details)
+        file_0 = b.single_byte_xor(b.file_0)
+
+        print details
+else:
+    pass
+
+
+
+
+
+
+
+
+
+
