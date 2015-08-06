@@ -39,13 +39,15 @@ class Bupectomy(object):
             out += chr(ord(i) ^ key)
         return out
 
-    def writefiles(self, buf, filename):
+    def writefiles(self, buf, dirname, filename):
+
+        details = os.path.join(dirname, filename)
 
         try:
-            with open(filename, "w") as f:
+            with open(os.path.join(dirname, filename), "w") as f:
                 f.write(buf)
         except Exception, e:
-            print e
+            sys.exit(e)
 
 
 if __name__ == "__main__":
@@ -55,6 +57,7 @@ if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("bup", help="McAfee .bup file")
     p.add_argument("-d", "--details", help="Print detection details", action="store_true")
+    p.add_argument("-o", "--output", help="Specify an output directory for the decoded files")
     args = p.parse_args()
 
     if args.bup:
@@ -68,6 +71,11 @@ if __name__ == "__main__":
 
     if args.details:
         print b.details
+
+    elif args.output:
+        b.writefiles(b.details, args.output, "details.txt")
+        b.writefiles(b.file_0, args.output, "file_0.bin")
+
 
     else:
         with open("details.txt", "w") as f:

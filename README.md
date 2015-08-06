@@ -30,7 +30,7 @@ optional arguments:
 
 ###To-Do
 
-- [ ] Add functionality to specify an alternate output directory for the decoded files
+- [x] Add functionality to specify an alternate output directory for the decoded files
 - [ ] VirusTotal API support
 - [ ] Malwr API support
 - [ ] Re-write the detected file with its original file name
