@@ -76,7 +76,6 @@ if __name__ == "__main__":
         b.writefiles(b.details, args.output, "details.txt")
         b.writefiles(b.file_0, args.output, "file_0.bin")
 
-
     else:
         with open("details.txt", "w") as f:
             f.write(b.details)
