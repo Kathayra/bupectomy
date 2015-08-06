@@ -8,17 +8,19 @@ Bupectomy is a Python script which assists with the handling of McAfee's .bup fi
 
 At the time of this writeup, the usage is rather basic. With no command-line switches set, bupectomy will simply extract and decode the file_0 and Details files from McAfee's bup into the current working directory. Invoking the -d switch will print the Details file to stdout and exit. 
 
-The "to-do" list below outlines my future plans for the script.
+The "to-do" list below outlines my future plans for the script and recent additions.
 
 ```
-usage: bupectomy.py [-h] [-d] bup
+usage: bupectomy.py [-h] [-d] [-o OUTPUT] bup
 
 positional arguments:
-  bup            McAfee .bup file
+  bup                   McAfee .bup file
 
 optional arguments:
-  -h, --help     show this help message and exit
-  -d, --details  Print detection details
+  -h, --help            show this help message and exit
+  -d, --details         Print detection details
+  -o OUTPUT, --output OUTPUT
+                        Specify an output directory for the decoded files
 ```
 
 ###Python Requirements
