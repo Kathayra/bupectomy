@@ -24,6 +24,7 @@ optional arguments:
 ###Python Requirements
 
 * argparse
+* ntpath
 * olefile
 * os
 * sys

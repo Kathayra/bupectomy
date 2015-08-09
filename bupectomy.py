@@ -1,7 +1,6 @@
 import ntpath
 import olefile
 import os
-import re
 import sys
 
 
