@@ -33,5 +33,5 @@ optional arguments:
 - [x] Add functionality to specify an alternate output directory for the decoded files
 - [ ] VirusTotal API support
 - [ ] Malwr API support
-- [ ] Re-write the detected file with its original file name
+- [x] Re-write the detected file with its original file name
 - [ ] Parse the Details text file properly

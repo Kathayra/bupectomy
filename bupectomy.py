@@ -1,5 +1,7 @@
+import ntpath
 import olefile
 import os
+import re
 import sys
 
 
@@ -8,6 +10,7 @@ class Bupectomy(object):
     def __init__(self):
         self.details = None
         self.file_0 = None
+        self.orig_filename = None
 
     def filecheck(self, bup):
         file_exists = os.path.exists(bup)
@@ -39,6 +42,16 @@ class Bupectomy(object):
             out += chr(ord(i) ^ key)
         return out
 
+    def parsedetails(self, detailsfile):
+
+        # Not done
+        # More to come here
+
+        for item in self.details.splitlines():
+            if "OriginalName" in item:
+                self.orig_filename = ntpath.basename(item)
+
+
     def writefiles(self, buf, dirname, filename):
 
         details = os.path.join(dirname, filename)
@@ -65,6 +78,7 @@ if __name__ == "__main__":
         b.filecheck(args.bup)
         b.extractfiles(args.bup)
         b.details = b.single_byte_xor(b.details)
+        b.parsedetails(b.details)
         b.file_0 = b.single_byte_xor(b.file_0)
     else:
         sys.exit("[-] .bup file not specified")
@@ -74,12 +88,12 @@ if __name__ == "__main__":
 
     elif args.output:
         b.writefiles(b.details, args.output, "details.txt")
-        b.writefiles(b.file_0, args.output, "file_0.bin")
+        b.writefiles(b.file_0, args.output, b.orig_filename)
 
     else:
         with open("details.txt", "w") as f:
             f.write(b.details)
-        with open("file_0.bin", "w") as f:
+        with open(b.orig_filename, "w") as f:
             f.write(b.file_0)
 
 else:
