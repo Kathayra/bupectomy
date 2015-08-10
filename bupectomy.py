@@ -97,13 +97,6 @@ class VirusTotal(object):
         self.vtcontent = self.httprequest("post", "/file/report", payload)
         return self.vtcontent
 
-    def responsecode(self, responsecode):
-        if responsecode == 0:
-            print "[-] Response code '0' was returned by Virustotal API"
-            print "[-] Either this resource was not found in VT's database, "\
-                  "or the request was unsuccessful"
-            sys.exit()
-
     def filehash(self, filepath):
         with open(filepath, "r") as f:
             filecontent = f.read()
