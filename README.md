@@ -52,8 +52,8 @@ Permalink: https://www.virustotal.com/file/a1dd7c6e65232bc5336f499a37d60b1b44c19
 
 ###To-Do
 
-- [x] Add functionality to specify an alternate output directory for the decoded files
-- [x] VirusTotal API support
+- [x] ~~Add functionality to specify an alternate output directory for the decoded files~~
+- [x] ~~VirusTotal API support~~
 - [ ] Malwr API support
-- [x] Re-write the detected file with its original file name
+- [x] ~~Re-write the detected file with its original file name~~
 - [ ] Parse the Details text file properly
