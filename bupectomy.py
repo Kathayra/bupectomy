@@ -62,6 +62,52 @@ class Bupectomy(object):
             sys.exit(e)
 
 
+
+class VirusTotal(object):
+    def __init__(self):
+        self.apikey = None
+
+        if not self.apikey:
+            sys.exit("[-] No VirusTotal API key provided")
+            
+        self.baseurl = "https://www.virustotal.com/vtapi/v2"
+        self.vendor = None
+
+    def httprequest(self, method, uri, payload):
+
+        if method == "post":
+
+            try:
+                req = requests.post(self.baseurl + uri, data=payload)
+                if "content-length" in req.headers:
+                    sys.exit("[-] Too many API requests")
+            except requests.ConnectionError as e:
+                sys.exit(e)
+
+            return json.loads(req.content)
+
+    def fileresults(self, filepath):
+        filehash = self.filehash(filepath)
+        payload = {"resource": filehash, "apikey": self.apikey}
+        self.vtcontent = self.httprequest("post", "/file/report", payload)
+        return self.vtcontent
+
+    def responsecode(self, responsecode):
+        if responsecode == 0:
+            print "[-] Response code '0' was returned by Virustotal API"
+            print "[-] Either this resource was not found in VT's database, "\
+                  "or the request was unsuccessful"
+            sys.exit()
+
+    def filehash(self, filepath):
+        with open(filepath, "r") as f:
+            filecontent = f.read()
+
+        hashobj = hashlib.sha256(filecontent).hexdigest()
+        return hashobj
+
+
+
 if __name__ == "__main__":
     
     from argparse import ArgumentParser
@@ -69,7 +115,8 @@ if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("bup", help="McAfee .bup file")
     p.add_argument("-d", "--details", help="Print detection details", action="store_true")
-    p.add_argument("-o", "--output", help="Specify an output directory for the decoded files")
+    p.add_argument("-o", "--output", help="Specify an output directory for the decoded files", action="store_true")
+    p.add_argument("-v" "--vt", help="Check VirusTotal for this file in a previous submission", action="store_true")
     args = p.parse_args()
 
     if args.bup:
@@ -85,11 +132,15 @@ if __name__ == "__main__":
     if args.details:
         print b.details
 
-    elif args.output:
+    if args.output:
         b.writefiles(b.details, args.output, "details.txt")
         b.writefiles(b.file_0, args.output, b.orig_filename)
 
-    else:
+    if args.vt:
+        vtresults = b.fileresults(args.bup)
+        print vtresults
+
+    if len(sys.argv) < 3:
         with open("details.txt", "w") as f:
             f.write(b.details)
         with open(b.orig_filename, "w") as f:
