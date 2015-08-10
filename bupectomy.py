@@ -1,6 +1,9 @@
+import hashlib
+import json
 import ntpath
 import olefile
 import os
+import requests
 import sys
 
 
@@ -9,7 +12,9 @@ class Bupectomy(object):
     def __init__(self):
         self.details = None
         self.file_0 = None
+
         self.orig_filename = None
+        self.file0_location = None
 
     def filecheck(self, bup):
         file_exists = os.path.exists(bup)
@@ -115,8 +120,8 @@ if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("bup", help="McAfee .bup file")
     p.add_argument("-d", "--details", help="Print detection details", action="store_true")
-    p.add_argument("-o", "--output", help="Specify an output directory for the decoded files", action="store_true")
-    p.add_argument("-v" "--vt", help="Check VirusTotal for this file in a previous submission", action="store_true")
+    p.add_argument("-o", "--output", help="Specify an output directory for the decoded files")
+    p.add_argument("-v", "--vt", help="Check VirusTotal for this file in a previous submission", action="store_true")
     args = p.parse_args()
 
     if args.bup:
@@ -131,29 +136,38 @@ if __name__ == "__main__":
 
     if args.details:
         print b.details
+        sys.exit()
 
-    if args.output:
+    elif args.output:
         b.writefiles(b.details, args.output, "details.txt")
         b.writefiles(b.file_0, args.output, b.orig_filename)
+        b.file0_location = os.path.join(args.output, b.orig_filename)
 
-    if args.vt:
-        vtresults = b.fileresults(args.bup)
-        print vtresults
-
-    if len(sys.argv) < 3:
+    else:
         with open("details.txt", "w") as f:
             f.write(b.details)
         with open(b.orig_filename, "w") as f:
             f.write(b.file_0)
 
+        b.file0_location = os.path.join(os.getcwd(), b.orig_filename)
+
+    if args.vt:
+        v = VirusTotal()
+        vtresults = v.fileresults(b.file0_location)
+
+        if not vtresults["response_code"]:
+            print "[-] File not found in VT's database"
+
+        else:
+            border = "=" * (len("File Scan Results") + 2)
+            print "\n{0}\n{1}\n{0}\n".format(border, "File Scan Results")
+            print "Scanned File: {}".format(b.orig_filename)
+            print "Scan Date: {}".format(vtresults["scan_date"])
+            print "Detection: {} / {}".format(
+                                              vtresults["positives"],
+                                              vtresults["total"]
+                                              )
+            print "Permalink: {}\n".format(vtresults["permalink"])
+
 else:
     pass
-
-
-
-
-
-
-
-
-
