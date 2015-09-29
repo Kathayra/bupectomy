@@ -111,17 +111,16 @@ optional arguments:
 
 #Python Requirements
 
-*argparse
-*getpass
-*json
-*ntpath
-*os
-*re
-*requests
-*sys
-*tempfile
-*olefile
-*pysmb
+* argparse
+* getpass
+* json
+* ntpath
+* os
+* re
+* sys
+* tempfile
+* olefile
+* pysmb
 
 #To-Do
 
