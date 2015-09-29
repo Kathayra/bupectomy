@@ -4,11 +4,11 @@
 
 Bupectomy is a Python script which assists with the handling of McAfee's .bup files. If you're unfamiliar, a great writeup on how McAfee deactivation works within the context of these bup files can be found [here.](http://blog.opensecurityresearch.com/2012/07/unbup-mcafee-bup-extractor-for-linux.html)
 
-###Usage
+#Usage
 
 With no command-line switches set, bupectomy will extract the files of interest from the bup, decode them, and write their contents to the current working directory.
 
-#Alternate output directory
+###Alternate output directory
 
 With the -o or --ouput command-line flags set, bupectomy will write the decoded files to your directory of choice:
 
@@ -55,15 +55,15 @@ dev@computer:$ cat Details
 
 ```
 
-#Details file only
+###Details File Only
 
 Executing bupectomy with the '-d' flag set simply prints the contents of the Details stream and exits. This functionality also pretty-prints a JSON-formatted string.
 
-#Corrupted bup files
+###Corrupted Bup Files
 
 Every once in a while, McAfee (seemingly) mangles the bup file when it is created. In this case, the sector data pointers are not properly written to disk; using most "unbup" scripts against such a file will not work. Even though the data pointers are not correct, often times the data itself is still in good working order within the file. When invoked with the '-c' flag on a corrupted bup file, bupectomy will attempt to locate the Details stream and write it to disk. In this case, the Details file will not be a JSON formatted string. This feature of bupectomy works on some assumptions about the data, and may not work for every corrupt bup file. 
 
-#Automated bup collection
+###Automated Bup Collection
 
 Another new addition is the ability to collect bup files from a given hostname via SMB. This feature also makes some assumptions and may not work out-of-the-box in every environment. Though with a little tweaking it should be helpful.
 
@@ -110,7 +110,7 @@ optional arguments:
 
 ```
 
-###Python Requirements
+#Python Requirements
 
 *argparse
 *getpass
@@ -124,7 +124,7 @@ optional arguments:
 *olefile
 *pysmb
 
-###To-Do
+#To-Do
 
 - [x] ~~Add functionality to specify an alternate output directory for the decoded files~~
 - [x] ~~Re-write the detected file with its original file name~~
