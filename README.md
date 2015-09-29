@@ -88,7 +88,6 @@ Password: password
 ```
 ...the bup files in question will be written into a new directory. The new directory name is the name of the workstation hostname or workstation IP address entered during the command's execution.
 
-```
 
 ```
 usage: bupectomy.py [-h] [-c] [-d] [-o OUTPUT] [-s] positional
