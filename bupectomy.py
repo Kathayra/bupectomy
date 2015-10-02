@@ -93,32 +93,34 @@ class Bupectomy(object):
 
     def writefiles(self, outputdir=False):
     
-        for keyname, streamname in zip(self.details_dict, self.streams):
-            if keyname == streamname:
+        for keyname in self.details_dict:
+            for streamname in self.streams:
+
+                if keyname == streamname:
     
-                if "File_" in keyname:
-                    original_filepath = self.details_dict[keyname]["OriginalName"]
-                    original_filename = ntpath.basename(original_filepath)
-                    streamdata = self.single_byte_xor(self.streams[streamname])
+                    if "File_" in keyname:
+                        original_filepath = self.details_dict[keyname]["OriginalName"]
+                        original_filename = ntpath.basename(original_filepath)
+                        streamdata = self.single_byte_xor(self.streams[streamname])
 
-                    if outputdir:
-                        with open(os.path.join(outputdir, original_filename), "w+") as f:
-                            f.write(streamdata)
-                            print "[ + ] Successfully wrote {}".format(original_filename)
-                    else:
-                        with open(original_filename, "w+") as f:
-                            f.write(streamdata)
-                            print "[ + ] Successfully wrote {}".format(original_filename)
+                        if outputdir:
+                            with open(os.path.join(outputdir, original_filename), "w+") as f:
+                                f.write(streamdata)
+                                print "[ + ] Successfully wrote {}".format(original_filename)
+                        else:
+                            with open(original_filename, "w+") as f:
+                                f.write(streamdata)
+                                print "[ + ] Successfully wrote {}".format(original_filename)
 
-                if keyname == "Details":
-                    if outputdir:
-                        with open(os.path.join(outputdir, "Details"), "w+") as f:
-                            f.write(self.details)
-                            print "[ + ] Successfully wrote Details"
-                    else:
-                        with open("Details", "w+") as f:
-                            f.write(self.details)
-                            print "[ + ] Successfully wrote Details"
+                    if keyname == "Details":
+                        if outputdir:
+                            with open(os.path.join(outputdir, "Details"), "w+") as f:
+                                f.write(self.details)
+                                print "[ + ] Successfully wrote Details"
+                        else:
+                            with open("Details", "w+") as f:
+                                f.write(self.details)
+                                print "[ + ] Successfully wrote Details"
 
 
     def corrupted_bup(self, bup):
