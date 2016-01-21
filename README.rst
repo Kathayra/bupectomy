@@ -14,17 +14,14 @@ Command-Line Options
 
 ::
 
-    dev@computer:~$ bupectomy.py -h
-    usage: bupectomy.py [-h] [-c] [-d] [-o OUTPUT] [-s] positional
+    dev@computer:~/$ python bupectomy.py -h
+    usage: bupectomy.py [-h] [-f FILE] [-c] [-d] [-o OUTPUT]
 
-    Lord of the bups
-
-    positional arguments:
-      positional            McAfee .bup file for bup extraction, or system IP/name
-                            for downloading bups over SMB
+    Lord Of The Bups
 
     optional arguments:
       -h, --help            show this help message and exit
+      -f FILE, --file FILE  .bup file to parse
       -c, --corrupt         Attempt to parse the Details portion of a corrupted
                             bup file
       -d, --details         Print detection details
