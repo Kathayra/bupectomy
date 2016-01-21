@@ -1,6 +1,6 @@
 Bupectomy
 -----------
-Bupectomy is a Python script which assists with the handling of McAfee's .bup files. If you're unfamiliar, a great writeup on how McAfee deactivation works within the context of these bup files can be found `here. <http://blog.opensecurityresearch.com/2012/07/unbup-mcafee-bup-extractor-for-linux.html>`_
+Bupectomy is a Python script which assists with the handling of McAfee's .bup files. If you're unfamiliar, a nice writeup on how McAfee deactivation works within the context of these bup files can be found `here. <http://blog.opensecurityresearch.com/2012/07/unbup-mcafee-bup-extractor-for-linux.html>`_
 
 Features
 ---------
@@ -30,8 +30,6 @@ Command-Line Options
       -d, --details         Print detection details
       -o OUTPUT, --output OUTPUT
                             Specify an output directory for the decoded files
-      -s, --smb             Using SMB, extract all bup files from a workstation
-
 
 **--file**
 
